@@ -4,25 +4,24 @@ import {
   IdcardOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
-import Tabela from "./Tabela";
-import { Link, useNavigate } from "react-router-dom";
+import { Layout, Menu, theme } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const items = [
   {
-    icon:<TeamOutlined/>,
-    label: 'Pessoas',
+    icon: <TeamOutlined />,
+    label: "Pessoas",
     key: "1",
     target: "/pessoas",
   },
   {
-    icon: <IdcardOutlined/>,
+    icon: <IdcardOutlined />,
     label: "Cadastro",
     key: "2",
     target: "/cadastro",
   },
   {
-    icon: <NotificationOutlined/>,
+    icon: <NotificationOutlined />,
     label: "Contato",
     key: "3",
     target: "/contato",
@@ -65,7 +64,7 @@ const PageLayout = ({ children }) => {
         />
         <Menu
           theme="dark"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={["1"]}
           mode="inline"
           onClick={handleMenuClick}
           items={items}

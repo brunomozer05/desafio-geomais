@@ -1,8 +1,22 @@
-import mysql from "mysql";
+import pg from 'pg'
 
-export const db = mysql.createConnection({
+const {Client} = pg
+
+export const db = new Client ({
     host: "localhost",
-    user: "root",
+    user: "postgres",
+    port: 5432,
     password: "1234",
-    database: "desafio-geomais",
-});
+    database: "desafiogeomais" 
+})
+
+db.connect();
+
+db.query(`Select * from usuarios`, (err, res)=>{
+    if(!err){
+        console.log(res.rows);
+    }else {
+        console.log(err.message);
+    }
+    db.end;
+})

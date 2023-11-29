@@ -8,7 +8,7 @@ const Tabela = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:8080/pessoas");
+      const response = await fetch("http://localhost:8080");
       const result = await response.json();
       setData(result);
     };
@@ -27,6 +27,7 @@ const Tabela = () => {
           title="Data de nascimento"
           dataIndex="data_nasc"
           key="data_nasc"
+          
         />
         <Column title="Gênero" dataIndex="sexo" key="sexo" />
       </ColumnGroup>

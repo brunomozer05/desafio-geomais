@@ -14,10 +14,7 @@ const Pessoas = () => {
       >
         <h1>Tabela de pessoas</h1>
       </Breadcrumb>
-      <div
-      >
         <Tabela />
-      </div>
     </>
   );
 };
