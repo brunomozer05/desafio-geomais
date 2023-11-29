@@ -1,42 +1,51 @@
 import React, { useState } from "react";
 import {
   NotificationOutlined,
-  PieChartOutlined,
+  IdcardOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import {
-  Button,
-  Cascader,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-} from 'antd';
-import FormInputs from "./components/FormInputs";
+import Tabela from "./Tabela";
+import { Link, useNavigate } from "react-router-dom";
 
+const items = [
+  {
+    icon:<TeamOutlined/>,
+    label: 'Pessoas',
+    key: "1",
+    target: "/pessoas",
+  },
+  {
+    icon: <IdcardOutlined/>,
+    label: "Cadastro",
+    key: "2",
+    target: "/cadastro",
+  },
+  {
+    icon: <NotificationOutlined/>,
+    label: "Contato",
+    key: "3",
+    target: "/contato",
+  },
+];
 
 const { Header, Content, Footer, Sider } = Layout;
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-const items = [
-  getItem("Option 1", "1", <PieChartOutlined />),
-  getItem("Contato", "2", <NotificationOutlined />),
-];
-const App = () => {
+
+const PageLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const navigate = useNavigate();
+
+  const handleMenuClick = ({ key }) => {
+    const { target } = items.find((item) => item.key === key) || {};
+    if (target) {
+      navigate(target);
+    }
+  };
+
   return (
     <Layout
       style={{
@@ -49,10 +58,16 @@ const App = () => {
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className="demo-logo-vertical" />
+        <img
+          width={70}
+          style={{ marginLeft: "3px" }}
+          src="https://avatars.githubusercontent.com/u/70327748?s=280&v=4"
+        />
         <Menu
           theme="dark"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={['1']}
           mode="inline"
+          onClick={handleMenuClick}
           items={items}
         />
       </Sider>
@@ -68,35 +83,17 @@ const App = () => {
             margin: "0 16px",
           }}
         >
-          <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-            }}
-          >
-            <FormInputs/>
-            Bill is a cat.
-          </div>
+          {children}
         </Content>
         <Footer
           style={{
             textAlign: "center",
           }}
         >
-          
           Geomais ©2023 Created by Bruno Mozer
         </Footer>
       </Layout>
     </Layout>
   );
 };
-export default App;
+export default PageLayout;
