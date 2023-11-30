@@ -4,7 +4,8 @@ CREATE TABLE usuarios (
     cpf TEXT,
     rg TEXT,
     data_nasc DATE,
-    sexo TEXT
+    sexo TEXT,
+    UNIQUE (cpf, rg)
 );
 
 INSERT INTO usuarios (nome,cpf,rg,data_nasc,sexo) VALUES ('Francisca Julia da Costa','457.696.936-65','47.360.897-2','1998-12-07','Feminino');

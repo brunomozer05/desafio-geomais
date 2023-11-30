@@ -1,58 +1,57 @@
-import React, { useState } from "react";
-import { Button, Form, Input, Select, DatePicker } from "antd";
+import React from "react";
+import { Button, Form, Input, Select } from "antd";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 8,
-    },
+    xs: { span: 24 },
+    sm: { span: 8 },
   },
   wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
+    xs: { span: 24 },
+    sm: { span: 16 },
   },
 };
+
 const tailFormItemLayout = {
   wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
+    xs: { span: 24, offset: 0 },
+    sm: { span: 16, offset: 8 },
   },
 };
+
 const FormInputs = () => {
   const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+
+  const onFinish = async (values) => {
+    try {
+      await axios.post("http://localhost:8080/", values, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      form.resetFields();
+
+      toast.success("Dados enviados com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar dados:", error);
+      toast.error("Erro ao enviar dados. Por favor, tente novamente.");
+    }
   };
+
   return (
-    <div
-      style={{
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
+    <div style={{ justifyContent: "center", width: "100%" }}>
       <Form
         {...formItemLayout}
-        form={form}
         name="form"
+        form={form}
         onFinish={onFinish}
-        style={{
-          maxWidth: 600,
-        }}
+        style={{ maxWidth: 600 }}
         scrollToFirstError
       >
         <Form.Item
@@ -62,6 +61,7 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
+              message: "Porfavor coloque seu Nome!",
             },
           ]}
         >
@@ -74,6 +74,7 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
+              message: "Porfavor coloque seu CPF!",
             },
           ]}
         >
@@ -86,37 +87,34 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
+              message: "Porfavor coloque seu RG!",
             },
           ]}
         >
           <Input type="number" />
         </Form.Item>
         <Form.Item
-          name="data-nascimento"
+          name="data_nasc"
           label="Data de nascimento"
           rules={[
             {
               required: true,
               whitespace: true,
+              message: "Porfavor coloque sua Data de nascimento",
             },
           ]}
         >
-          <DatePicker />
+          <Input type="date" />
         </Form.Item>
-
         <Form.Item
-          name="genero"
+          name="sexo"
           label="Gênero"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+          rules={[{ required: true, message: "Porfavor escolha seu Gênero!" }]}
         >
           <Select placeholder="escolha seu gênero">
-            <Option value="M">Masculino</Option>
-            <Option value="F">Feminino</Option>
-            <Option value="O">Outro</Option>
+            <Option value="Masculino">Masculino</Option>
+            <Option value="Feminino">Feminino</Option>
+            <Option value="Outro">Outro</Option>
           </Select>
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
@@ -125,7 +123,9 @@ const FormInputs = () => {
           </Button>
         </Form.Item>
       </Form>
+      <ToastContainer />
     </div>
   );
 };
+
 export default FormInputs;
