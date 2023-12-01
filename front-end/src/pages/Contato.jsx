@@ -13,9 +13,7 @@ const Contato = () => {
       >
         <h1>Contato</h1>
       </Breadcrumb>
-      <div>
-        
-      </div>
+      <div></div>
     </>
   );
 };

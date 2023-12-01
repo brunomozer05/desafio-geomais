@@ -1,22 +1,22 @@
-import pg from 'pg'
+import pg from "pg";
 
-const {Client} = pg
+const { Client } = pg;
 
-export const db = new Client ({
-    host: "localhost",
-    user: "postgres",
-    port: 5432,
-    password: "1234",
-    database: "desafiogeomais" 
-})
+export const db = new Client({
+  host: "localhost",
+  user: "postgres",
+  port: 5432,
+  password: "1234",
+  database: "desafiogeomais",
+});
 
 db.connect();
 
-db.query(`Select * from usuarios`, (err, res)=>{
-    if(!err){
-        console.log(res.rows);
-    }else {
-        console.log(err.message);
-    }
-    db.end;
-})
+db.query(`Select * from usuarios`, (err, res) => {
+  if (!err) {
+    console.log(res.rows);
+  } else {
+    console.log(err.message);
+  }
+  db.end;
+});

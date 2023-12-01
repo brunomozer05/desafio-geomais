@@ -12,6 +12,7 @@ const Tabela = () => {
   const [deletingUserId, setDeletingUserId] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [userCount, setUserCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +27,10 @@ const Tabela = () => {
           };
         });
         setFormattedData(formattedResult);
+
+        await fetch("http://localhost:8080/count")
+          .then((res) => res.json())
+          .then((data) => setUserCount(data.count));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -48,6 +53,10 @@ const Tabela = () => {
       });
 
       if (response.ok) {
+        await fetch("http://localhost:8080/count")
+          .then((res) => res.json())
+          .then((data) => setUserCount(data.count));
+
         const newData = data.filter((item) => item.id !== userId);
         setData(newData);
         const formattedNewData = newData.map((item) => {
@@ -88,6 +97,7 @@ const Tabela = () => {
 
   return (
     <div>
+      <div>Total de usuários cadastrados: {userCount}</div>
       <Modal
         title="Editar Dados"
         visible={isEditModalOpen}

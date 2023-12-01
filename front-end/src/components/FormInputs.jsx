@@ -60,7 +60,7 @@ const FormInputs = ({ editingId }) => {
       toast.error("Erro ao enviar dados. Por favor, tente novamente.");
     }
   };
-    
+
   return (
     <div style={{ justifyContent: "center", width: "100%" }}>
       <Form
