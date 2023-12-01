@@ -36,7 +36,7 @@
 <br/>
 
 ## Deletando usuário
-<img src="https://github.com/brunomozer05/desafio-geomais/blob/main/front-end/public/busca.gif">
+<img src="https://github.com/brunomozer05/desafio-geomais/blob/main/front-end/public/delete.gif">
 <br/>
 <br/>
 
