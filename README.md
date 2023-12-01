@@ -20,6 +20,8 @@
 6. yarn start
 ```
 <br/>
+ Códigos para gerar o <a href="https://github.com/brunomozer05/desafio-geomais/blob/main/back-end/db.sql">Banco de dados<a/>
+
 
 # Preview do projeto
 
