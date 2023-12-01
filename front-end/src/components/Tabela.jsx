@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Table, Space, Modal, Input, Select } from "antd";
+import { Table, Space, Modal } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FormInputs from "./FormInputs";
 
 const { Column, ColumnGroup } = Table;
-const { Option } = Select;
 
 const Tabela = () => {
   const [data, setData] = useState([]);
+  const [formattedData, setFormattedData] = useState([]);
   const [deletingUserId, setDeletingUserId] = useState(null);
-
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,13 +19,27 @@ const Tabela = () => {
         const response = await fetch("http://localhost:8080");
         const result = await response.json();
         setData(result);
+        const formattedResult = result.map((item) => {
+          return {
+            ...item,
+            data_nasc: formatarData(item.data_nasc),
+          };
+        });
+        setFormattedData(formattedResult);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [isEditModalOpen]);
+  const formatarData = (data) => {
+    const dataObj = new Date(data);
+    const dia = String(dataObj.getDate()).padStart(2, "0");
+    const mes = String(dataObj.getMonth() + 1).padStart(2, "0");
+    const ano = dataObj.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
 
   const handleDelete = async (userId) => {
     try {
@@ -34,6 +50,13 @@ const Tabela = () => {
       if (response.ok) {
         const newData = data.filter((item) => item.id !== userId);
         setData(newData);
+        const formattedNewData = newData.map((item) => {
+          return {
+            ...item,
+            data_nasc: formatarData(item.data_nasc),
+          };
+        });
+        setFormattedData(formattedNewData);
         toast.success("Usuário excluído com sucesso!");
       } else {
         console.error("Erro ao excluir usuário");
@@ -45,6 +68,11 @@ const Tabela = () => {
     } finally {
       setDeletingUserId(null);
     }
+  };
+
+  const handleModalClose = () => {
+    setEditModalOpen(false);
+    setEditingId(null);
   };
 
   const showDeleteConfirm = (userId) => {
@@ -60,8 +88,16 @@ const Tabela = () => {
 
   return (
     <div>
+      <Modal
+        title="Editar Dados"
+        visible={isEditModalOpen}
+        onCancel={handleModalClose}
+        footer={null}
+      >
+        <FormInputs editingId={editingId} onClose={handleModalClose} />
+      </Modal>
       <ToastContainer />
-      <Table dataSource={data}>
+      <Table dataSource={formattedData}>
         <ColumnGroup title="Dados cadastrados">
           <Column title="Nome" dataIndex="nome" key="nome" />
           <Column title="CPF" dataIndex="cpf" key="cpf" />
@@ -77,7 +113,14 @@ const Tabela = () => {
             key="action"
             render={(_, record) => (
               <Space size="middle">
-                <a>Editar</a>
+                <a
+                  onClick={() => {
+                    setEditModalOpen(true);
+                    setEditingId(record.id);
+                  }}
+                >
+                  Editar
+                </a>
                 <a onClick={() => showDeleteConfirm(record.id)}>Excluir</a>
               </Space>
             )}

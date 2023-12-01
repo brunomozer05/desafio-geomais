@@ -24,10 +24,10 @@ const tailFormItemLayout = {
   },
 };
 
-const FormInputs = () => {
+const FormInputs = ({ editingId }) => {
   const [form] = Form.useForm();
 
-  const onFinish = async (values) => {
+  const onFinishCreate = async (values) => {
     try {
       await axios.post("http://localhost:8080/", values, {
         headers: {
@@ -44,13 +44,30 @@ const FormInputs = () => {
     }
   };
 
+  const onFinishUpdate = async (values) => {
+    try {
+      await axios.put(`http://localhost:8080/${editingId}`, values, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      form.resetFields();
+
+      toast.success("Dados enviados com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar dados:", error);
+      toast.error("Erro ao enviar dados. Por favor, tente novamente.");
+    }
+  };
+    
   return (
     <div style={{ justifyContent: "center", width: "100%" }}>
       <Form
         {...formItemLayout}
         name="form"
         form={form}
-        onFinish={onFinish}
+        onFinish={editingId ? onFinishUpdate : onFinishCreate}
         style={{ maxWidth: 600 }}
         scrollToFirstError
       >
@@ -61,7 +78,7 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
-              message: "Porfavor coloque seu Nome!",
+              message: "Por favor coloque seu Nome!",
             },
           ]}
         >
@@ -74,7 +91,7 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
-              message: "Porfavor coloque seu CPF!",
+              message: "Por favor coloque seu CPF!",
             },
           ]}
         >
@@ -87,7 +104,7 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
-              message: "Porfavor coloque seu RG!",
+              message: "Por favor coloque seu RG!",
             },
           ]}
         >
@@ -100,7 +117,7 @@ const FormInputs = () => {
             {
               required: true,
               whitespace: true,
-              message: "Porfavor coloque sua Data de nascimento",
+              message: "Por favor coloque sua Data de nascimento",
             },
           ]}
         >
@@ -109,7 +126,7 @@ const FormInputs = () => {
         <Form.Item
           name="sexo"
           label="Gênero"
-          rules={[{ required: true, message: "Porfavor escolha seu Gênero!" }]}
+          rules={[{ required: true, message: "Por favor escolha seu Gênero!" }]}
         >
           <Select placeholder="escolha seu gênero">
             <Option value="Masculino">Masculino</Option>
