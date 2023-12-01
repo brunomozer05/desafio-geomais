@@ -47,6 +47,7 @@ const PageLayout = ({ children }) => {
 
   return (
     <Layout
+      align="center"
       style={{
         minHeight: "100vh",
       }}

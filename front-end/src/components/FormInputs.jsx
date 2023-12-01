@@ -62,7 +62,7 @@ const FormInputs = ({ editingId }) => {
   };
 
   return (
-    <div style={{ justifyContent: "center", width: "100%" }}>
+    <div align="start">
       <Form
         {...formItemLayout}
         name="form"

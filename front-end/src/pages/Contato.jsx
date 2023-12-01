@@ -1,22 +1,25 @@
 import React from "react";
-import { Breadcrumb } from "antd";
+import { Card, Typography } from 'antd';
+import {
+  WhatsAppOutlined, MailOutlined , GithubOutlined
+} from "@ant-design/icons";
 
-const Contato = () => {
-  return (
-    <>
-      <Breadcrumb
-        style={{
-          display: "flex",
-          margin: "4px 0",
-          textAlign: "center",
-        }}
-      >
-        <h1>Contato</h1>
-      </Breadcrumb>
-      <div>
-        
-      </div>
-    </>
-  );
-};
-export default Contato;
+const { Title } = Typography;
+
+const App: React.FC = () => (
+  <div style={{marginTop: 120}}>
+  <Card   style={{ width: 400, fontSize: 20}}>
+    <Card>
+    <Title>Contato</Title>
+    </Card>
+    <br/>
+    <p ><WhatsAppOutlined/> (48)988612552</p>
+
+    <p><MailOutlined /> brunomozer05@gmail.com</p>
+
+    <a href="https://github.com/brunomozer05"><GithubOutlined /> brunomozer05</a>
+  </Card>
+  </div>
+);
+
+export default App;

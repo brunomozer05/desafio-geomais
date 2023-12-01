@@ -113,7 +113,7 @@ const Tabela = () => {
   };
 
   return (
-    <div>
+    <div align="start">
       <div>Total de usuários cadastrados: {userCount}</div>
       <Input
         style={{ width: 250 }}
