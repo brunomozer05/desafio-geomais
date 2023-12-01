@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Space, Modal } from "antd";
+import { Table, Space, Modal, Input } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FormInputs from "./FormInputs";
@@ -13,6 +13,8 @@ const Tabela = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [userCount, setUserCount] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,17 +29,19 @@ const Tabela = () => {
           };
         });
         setFormattedData(formattedResult);
+        setFilteredData(formattedResult);
 
         await fetch("http://localhost:8080/count")
           .then((res) => res.json())
           .then((data) => setUserCount(data.count));
       } catch (error) {
-        console.error("Error fetching data:", error);
+        toast.error("Error fetching:", error);
       }
     };
 
     fetchData();
   }, [isEditModalOpen]);
+
   const formatarData = (data) => {
     const dataObj = new Date(data);
     const dia = String(dataObj.getDate()).padStart(2, "0");
@@ -66,13 +70,12 @@ const Tabela = () => {
           };
         });
         setFormattedData(formattedNewData);
+        setFilteredData(formattedNewData);
         toast.success("Usuário excluído com sucesso!");
       } else {
-        console.error("Erro ao excluir usuário");
         toast.error("Erro ao excluir usuário");
       }
     } catch (error) {
-      console.error("Erro ao excluir usuário:", error);
       toast.error("Erro ao excluir usuário");
     } finally {
       setDeletingUserId(null);
@@ -95,9 +98,30 @@ const Tabela = () => {
     });
   };
 
+  const handleSearchInputChange = (e) => {
+    const input = e.target.value;
+    setSearchInput(input);
+
+    const filteredResult = formattedData.filter(
+      (item) =>
+        item.nome.toLowerCase().includes(input.toLowerCase()) ||
+        item.cpf.includes(input) ||
+        item.rg.includes(input)
+    );
+
+    setFilteredData(filteredResult);
+  };
+
   return (
     <div>
       <div>Total de usuários cadastrados: {userCount}</div>
+      <Input
+        style={{ width: 250 }}
+        type="text"
+        placeholder="Buscar por Nome, CPF ou RG"
+        value={searchInput}
+        onChange={handleSearchInputChange}
+      />
       <Modal
         title="Editar Dados"
         visible={isEditModalOpen}
@@ -107,7 +131,7 @@ const Tabela = () => {
         <FormInputs editingId={editingId} onClose={handleModalClose} />
       </Modal>
       <ToastContainer />
-      <Table dataSource={formattedData}>
+      <Table dataSource={filteredData}>
         <ColumnGroup title="Dados cadastrados">
           <Column title="Nome" dataIndex="nome" key="nome" />
           <Column title="CPF" dataIndex="cpf" key="cpf" />
